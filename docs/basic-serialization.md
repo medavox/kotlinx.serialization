@@ -190,8 +190,8 @@ We can clearly see that only the `name` and `stars` properties are present in th
 
 ### Constructor properties requirement
 
-If we want to define the `Project` class so that it takes a path string, and then
-deconstructs it into the corresponding properties, we might be tempted to write something like the code below.
+If we want the `Project` class to takes a path string, and then
+deconstruct it into the corresponding properties, we might be tempted to write something like the code below.
 
 ```kotlin
 @Serializable
