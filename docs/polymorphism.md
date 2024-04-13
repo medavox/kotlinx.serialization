@@ -37,18 +37,18 @@ import kotlinx.serialization.json.*
 
 ## Closed polymorphism
 
-Let us start with basic introduction to polymorphism.
+Let's start with a basic introduction to polymorphism.
 
 ### Static types
 
-Kotlin Serialization is fully static with respect to types by default. The structure of encoded objects is determined 
-by *compile-time* types of objects. Let's examine this aspect in more detail and learn how
+By default, Kotlin Serialization is fully static with respect to types. The structure of encoded objects is determined 
+by the *compile-time* types of objects. Let's examine this aspect in more detail, and learn how
 to serialize polymorphic data structures, where the type of data is determined at runtime.
 
-To show the static nature of Kotlin Serialization let us make the following setup. An `open class Project`
+To show the static nature of Kotlin Serialization, let's create the following setup. An `open class Project`
 has just the `name` property, while its derived `class OwnedProject` adds an `owner` property.
-In the below example, we serialize `data` variable with a static type of
-`Project` that is initialized with an instance of `OwnedProject` at runtime.
+In the below example, we serialize the `data` variable with a static type of
+`Project` which is initialized with an instance of `OwnedProject` at runtime.
 
 ```kotlin
 @Serializable
@@ -64,7 +64,7 @@ fun main() {
 
 > You can get the full code [here](../guide/example/example-poly-01.kt).
 
-Despite the runtime type of `OwnedProject`, only the `Project` class properties are getting serialized.  
+Despite the runtime type of `OwnedProject`, only the `Project` class properties get serialized.  
  
 ```text
 {"name":"kotlinx.coroutines"}
@@ -93,16 +93,16 @@ We get an error, because the `OwnedProject` class is not serializable.
 ```text
 Exception in thread "main" kotlinx.serialization.SerializationException: Serializer for class 'OwnedProject' is not found.
 Please ensure that class is marked as '@Serializable' and that the serialization compiler plugin is applied.
-```                                                                       
+```
 
 <!--- TEST LINES_START -->
 
-### Designing serializable hierarchy
+### Designing a serializable hierarchy
 
-We cannot simply mark `OwnedProject` from the previous example as `@Serializable`. It does not compile, 
+We can't simply mark `OwnedProject` from the previous example as `@Serializable`. It doesn't compile, 
 running into the [constructor properties requirement](basic-serialization.md#constructor-properties-requirement). 
-To make hierarchy of classes serializable, the properties in the parent class have to be marked `abstract`, 
-making the `Project` class `abstract`, too. 
+To make the hierarchy of classes serializable, the properties in the parent class have to be marked `abstract`, 
+making the `Project` class `abstract` too.
 
 ```kotlin
 @Serializable
@@ -115,7 +115,7 @@ class OwnedProject(override val name: String, val owner: String) : Project()
 fun main() {
     val data: Project = OwnedProject("kotlinx.coroutines", "kotlin")
     println(Json.encodeToString(data))
-}  
+}
 ```
 
 > You can get the full code [here](../guide/example/example-poly-03.kt).
@@ -126,7 +126,7 @@ This is close to the best design for a serializable hierarchy of classes, but ru
 Exception in thread "main" kotlinx.serialization.SerializationException: Serializer for subclass 'OwnedProject' is not found in the polymorphic scope of 'Project'.
 Check if class with serial name 'OwnedProject' exists and serializer is registered in a corresponding SerializersModule.
 To be registered automatically, class 'OwnedProject' has to be '@Serializable', and the base class 'Project' has to be sealed and '@Serializable'.
-```         
+```
 
 <!--- TEST LINES_START -->
 
